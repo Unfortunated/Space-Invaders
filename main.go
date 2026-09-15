@@ -7,22 +7,22 @@ import (
 
 func (g *Game) Update() error {
 	g.stateManager.HandleStateTransition()
-    g.state = g.stateManager.CurrentState()
-    return nil
+	g.state = g.stateManager.currentState
+	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	renderer := &ScreenRenderer{}
-    currentScreen := renderer.ScreenFor(g.state)
-    screen.Clear()
-    switch currentScreen {
-    case StartScreen:
-        // draw menu
-    case PlayScreen:
-        // draw game
-    case EndScreen:
-        // draw game over
-    }
+	currentScreen := renderer.ScreenInitialize(g.state)
+	screen.Clear()
+	switch currentScreen {
+	case StartScreen:
+		// draw menu
+	case PlayScreen:
+		// draw game
+	case EndScreen:
+		// draw game over
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -34,7 +34,7 @@ func main() {
 		state: StateMenu,
 		lives: playerLives,
 	}
-	g.StateManager = &StateManager{
+	g.stateManager = &StateManager{
 		currentState: StateMenu,
 		game: g,
 	}

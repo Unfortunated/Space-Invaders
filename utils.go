@@ -27,6 +27,7 @@ func (sc *ScreenRenderer) ScreenInitialize(state GameState) GameScreen {
 	case StateGameOver:
 		return EndScreen
 	}
+	return StartScreen
 }
 
 func (sc *ScreenRenderer) Render(ebScreen *ebiten.Image) {
