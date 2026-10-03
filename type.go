@@ -1,16 +1,18 @@
 package main
 
-type Game struct{
-	state GameState
-	score int
-	lives int
-	level int
+type Game struct {
+	player       Player
+	state        GameState
+	score        int
+	lives        int
+	level        int
+	debugTicks   int
 	stateManager *StateManager
 }
 
 type StateManager struct {
 	currentState GameState
-	game *Game
+	game         *Game
 }
 
 type ScreenRenderer struct {
@@ -18,6 +20,7 @@ type ScreenRenderer struct {
 }
 
 type GameState int
+
 const (
 	StateMenu GameState = iota
 	StatePlaying
@@ -25,6 +28,7 @@ const (
 )
 
 type GameScreen int
+
 const (
 	StartScreen GameScreen = iota
 	PlayScreen
