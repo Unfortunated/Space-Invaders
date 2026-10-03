@@ -1,4 +1,5 @@
 package main
+
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -6,13 +7,15 @@ import (
 func (sm *StateManager) HandleStateTransition() {
 	switch sm.currentState {
 	case StateMenu:
+		sm.game.player.ResetPos()
 		sm.currentState = StatePlaying
-	case StatePlaying: 
+	case StatePlaying:
 		if sm.game.lives <= 0 {
 			sm.currentState = StateGameOver
 		}
-	case StateGameOver: 
+	case StateGameOver:
 		if sm.game.lives > 0 {
+			sm.game.player.ResetPos()
 			sm.currentState = StatePlaying
 		}
 	}
