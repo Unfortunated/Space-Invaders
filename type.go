@@ -1,5 +1,7 @@
 package main
 
+import "github.com/hajimehoshi/ebiten/v2"
+
 type Game struct {
 	player       Player
 	state        GameState
@@ -8,6 +10,8 @@ type Game struct {
 	level        int
 	debugTicks   int
 	stateManager *StateManager
+	bullets      []Bullet
+	bulletImage  *ebiten.Image
 }
 
 type StateManager struct {

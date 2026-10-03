@@ -10,4 +10,8 @@ const (
 	playerOriginX   = 320
 	playerOriginY   = 360
 	playerMoveSpeed = 3
+
+	// bullet
+	bulletSpeed = 2
+	bulletWidth = 9
 )

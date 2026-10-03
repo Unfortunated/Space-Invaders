@@ -12,12 +12,26 @@ func (g *Game) Update() error {
 	g.state = g.stateManager.currentState
 
 	if g.state == StatePlaying {
-		if g.debugTicks >= 30 {
-			log.Printf("state=%v playerPos=(%v,%v)", g.state, g.player.posX, g.player.posY)
+		if g.debugTicks >= 60 {
+			// log.Printf("state=%v playerPos=(%v,%v)", g.state, g.player.posX, g.player.posY)
+			// log.Printf("state=%v bulletPos=(%v,%v) bulletActive=%v", g.state, g.bullets.posX, g.bullets.posY, g.bullets.isActive)
 			g.debugTicks = 0
 		}
 		g.debugTicks++
 		g.player.Move()
+		activeBullets := 0
+		for i := range g.bullets {
+			g.bullets[i].Update()
+			if g.bullets[i].isActive {
+				g.bullets[activeBullets] = g.bullets[i]
+				activeBullets += 1
+			}
+		}
+		g.bullets = g.bullets[:activeBullets]
+		var x, y, fired = g.player.Shoot()
+		if fired && len(g.bullets) < 4 {
+			g.bullets = append(g.bullets, Bullet{x, y, bulletSpeed, g.bulletImage, fired, bulletWidth})
+		}
 	}
 	return nil
 }
@@ -32,6 +46,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	case PlayScreen:
 		// game screen
 		g.player.Draw(screen)
+		for i := range g.bullets {
+			if g.bullets[i].isActive {
+				g.bullets[i].Draw(screen)
+			}
+		}
 	case EndScreen:
 		// draw game over
 	}
@@ -47,10 +66,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	bulletImage, _, bulletErr := ebitenutil.NewImageFromFile("assets/bullet.png")
+	if bulletErr != nil {
+		log.Fatal(bulletErr)
+	}
+
 	g := &Game{
-		player: Player{3, playerOriginX, playerOriginY, 3, spaceShip, 24, 48},
-		state:  StateMenu,
-		lives:  playerLives,
+		player:      Player{3, playerOriginX, playerOriginY, 3, spaceShip, 24, 48},
+		state:       StateMenu,
+		lives:       playerLives,
+		bullets:     []Bullet{},
+		bulletImage: bulletImage,
 	}
 	g.stateManager = &StateManager{
 		currentState: StateMenu,

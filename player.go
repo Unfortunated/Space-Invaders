@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type Player struct {
@@ -61,4 +62,11 @@ func (p *Player) Draw(screen *ebiten.Image) {
 
 func (p *Player) ResetPos() {
 	p.posX, p.posY = playerOriginX, playerOriginY
+}
+
+func (p *Player) Shoot() (int, int, bool) {
+	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
+		return p.posX + p.playerWidth/2 - bulletWidth/2, p.posY, true
+	}
+	return -1, -1, false
 }
