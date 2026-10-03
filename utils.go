@@ -7,6 +7,7 @@ import (
 func (sm *StateManager) HandleStateTransition() {
 	switch sm.currentState {
 	case StateMenu:
+		sm.game.bullets = []Bullet{}
 		sm.game.player.ResetPos()
 		sm.currentState = StatePlaying
 	case StatePlaying:
@@ -15,6 +16,7 @@ func (sm *StateManager) HandleStateTransition() {
 		}
 	case StateGameOver:
 		if sm.game.lives > 0 {
+			sm.game.bullets = []Bullet{}
 			sm.game.player.ResetPos()
 			sm.currentState = StatePlaying
 		}
